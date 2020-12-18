@@ -15,3 +15,26 @@ end
 
 result = find_sum(puzzle_entries)
 p result[0] * result[1]
+
+################
+# REFACTOR #####
+################
+
+def find_sum_compliment(entries)
+  i = 0
+  compliments = {}
+
+  while i < entries.size
+    num = entries[i]
+    compliment = compliments[num]
+
+    if compliment
+      return num * compliment
+    else
+      compliments[2020 - num] = num
+    end
+    i += 1
+  end
+end
+
+p find_sum_compliment(puzzle_entries)
