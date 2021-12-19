@@ -16,7 +16,7 @@ defmodule SonarSweep do
 
     measurements
     |> Enum.chunk_every(3, 1, :discard)
-    |> Enum.map(fn window -> {0, Enum.sum(window)} end)
+    |> Enum.map(fn window -> Enum.sum(window) end)
     |> depth_increase()
   end
 
