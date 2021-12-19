@@ -1,0 +1,2 @@
+defmodule GiantSquid do
+end
