@@ -1,8 +1,8 @@
 use std::fs;
 
 fn main() {
-    println!("{:?}", depth_measurement("../puzzle_input.txt"));
-    // println!("{:?}", sum_depth_measurement("../puzzle_input.txt"));
+    println!("{:?}", depth_measurement("./puzzle_input.txt"));
+    println!("{:?}", sum_depth_measurement("./puzzle_input.txt"));
 }
 
 // Part one: counts no. of measurement's larger than the previous measurement
@@ -10,7 +10,6 @@ pub fn depth_measurement(path: &str) -> u32 {
     let measurements = parse(path);
     let measurement_cap = measurements.len() - 1;
     let mut depth_increase = 0;
-
 
     for (i, measurement) in measurements.iter().enumerate() {
         if i == measurement_cap {
@@ -25,9 +24,23 @@ pub fn depth_measurement(path: &str) -> u32 {
 }
 
 // Part two: counts sums of a three-measurement sliding window of measurements
-pub fn sum_depth_measurement(_path: &str) -> u32 {
-    // todo
-    return 0;
+pub fn sum_depth_measurement(path: &str) -> i32 {
+    let measurements = parse(path);
+
+    // forward index up to three elements at most
+    let measurement_cap = measurements.len() - 3;
+    let mut i = 0;
+    let mut depth_increase = 0;
+
+    while i < measurement_cap {
+        let window: i32 = measurements[i..i+3].iter().sum::<i32>();
+        let next_window: i32 = measurements[i+1..i+4].iter().sum::<i32>();
+        i += 1;
+
+        if next_window > window { depth_increase += 1 }
+    }
+
+    return depth_increase
 }
 
 fn parse(path: &str) -> Vec<i32> {
