@@ -10,8 +10,8 @@ defmodule DiveTest do
   end
 
   describe "Part two example course path" do
-    test "" do
-      # assert Dive.("./example_input.txt") == nil
+    test "Calculates the horizontal position and depth, using new interpretation of the commands, multiplies them" do
+      assert Dive.corrected_course_path("./example_input.txt") == 900
     end
   end
 end
