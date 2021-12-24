@@ -3,15 +3,15 @@ ExUnit.start()
 defmodule DiveTest do
   use ExUnit.Case, async: true
 
-  describe "" do
-    test "" do
-      assert Dive.("./example_input.txt") == nil
+  describe "Part one example course path" do
+    test "Calculates the horizontal position and depth, multiplies them" do
+      assert Dive.course_path("./example_input.txt") == nil
     end
   end
 
-  describe "" do
+  describe "Part two example course path" do
     test "" do
-      assert Dive.("./example_input.txt") == nil
+      # assert Dive.("./example_input.txt") == nil
     end
   end
 end

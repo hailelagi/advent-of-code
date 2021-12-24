@@ -14,8 +14,11 @@ An example for day one(Sonar sweep) is:
 
 I chose not to structure these challenges as a mix project, because they're one off utility scripts and I like the lighter setup.
 
-## Racket
-### TODO
-
 ## Rust
-### TODO
+
+To run tests in the specific day's challenge directory:
+`$ cargo test`
+
+
+## Racket
+Shelving this for now. I do want to learn a lisp at some point? But it's just not fun slogging through a thousand page text book :(

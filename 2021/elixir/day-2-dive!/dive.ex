@@ -1,12 +1,16 @@
 defmodule Dive do
-  def parse do
-    {:ok, report} = File.read("./puzzle_input.txt")
-    report
+  @doc """
+  Part One: Calculates the horizontal position and depth, multiplies them
+  """
+  def course_path(path \\ "./puzzle_input.txt") do
+    positions = parse(path)
+
+    positions
   end
 
-  def horizontal_position do
-  end
-
-  def depth do
+  defp parse(path) do
+    {:ok, input} = File.read(path)
+    input
+    |> String.split("\n")
   end
 end

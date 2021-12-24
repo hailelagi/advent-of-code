@@ -6,7 +6,7 @@ fn main() {
 }
 
 // Part one: counts no. of measurement's larger than the previous measurement
-pub fn depth_measurement(path: &str) -> u32 {
+pub fn depth_measurement(path: &str) -> i32 {
     let measurements = parse(path);
     let measurement_cap = measurements.len() - 1;
     let mut depth_increase = 0;
