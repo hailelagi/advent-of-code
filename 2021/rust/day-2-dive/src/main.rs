@@ -1,26 +1,56 @@
+use std::fs;
+
+#[derive(Debug)]
+struct Command {
+    position: u32,
+    direction: String,
+}
+
 fn main() {
-    println!("Hello, world!");
+    println!("{:?}", course_path("./puzzle_input.txt"));
+    // println!("{:?}", corrected_course_path("./puzzle_input.txt"));
 }
 
-// Part One: Calculate the horizontal position and depth of the course
-// return horizontal * depth
-fn course_path(path: &str) -> i32 {
-    let positions = parse(path)
+// Part One: Calculates the horizontal position and depth of the course
+fn course_path(path: &str) -> u32 {
+    let commands = parse(path);
+    let mut horizontal = 0;
+    let mut depth = 0;
 
-    return 0
-}
-
-fn parse(path: &str) -> Vec<i32> {
-    let puzzle_input = fs::read_to_string(path).expect("err reading puzzle input!");
-    let puzzle_input = puzzle_input.split("\n");
-
-    let mut measurements: Vec<i32> = Vec::new();
-
-    for i in puzzle_input {
-        measurements.push(i.parse().unwrap());
+    for command in commands {
+        match command.direction.as_str() {
+            "forward" => horizontal += command.position,
+            "down" => depth += command.position,
+            "up" => depth -= command.position,
+            _ => ()
+        }
     }
 
-    return measurements;
+    return horizontal * depth;
+}
+
+// Part Two: Calculates the horizontal position and depth, using new interpretation of the commands
+fn corrected_course_path(path: &str) -> i32 {
+    let _commands = parse(path);
+
+    return 0;
+}
+
+fn parse(path: &str) -> Vec<Command> {
+    let puzzle_input = fs::read_to_string(path).expect("err reading puzzle input!");
+    let puzzle_input = puzzle_input.lines();
+
+    let mut commands: Vec<Command> = Vec::new();
+
+    for input in puzzle_input {
+        let command: Vec<&str>  = input.split(" ").collect();
+        let direction = command[0].to_string();
+        let position = command[1].parse().unwrap();
+
+        commands.push(Command{direction, position})
+    }
+    
+    return commands;
 }
 
 #[cfg(test)]
@@ -31,9 +61,10 @@ mod tests {
     fn test_course_path() {
         assert_eq!(course_path("./example_input.txt"), 150);
     }
+
     /*
     #[test]
-    fn test_two() {
-        assert_eq!(test("./example_input.txt"), 0);
+    fn test_corrected_course_path() {
+        assert_eq!(corrected_course_path("./example_input.txt"), 900);
     } */
 }
