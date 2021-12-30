@@ -9,9 +9,9 @@ defmodule BinaryDiagnosticTest do
     end
   end
 
-  describe "Part two: " do
-    test "nothing" do
-      # assert BinaryDiagnostic.("./example_input.txt") == nil
+  describe "Part two: Find the life support rating" do
+    test "example life support rating is accurate" do
+      assert BinaryDiagnostic.life_support_rating("./example_input.txt") == 230
     end
   end
 end
