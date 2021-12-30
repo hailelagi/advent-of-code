@@ -4,13 +4,13 @@ defmodule BinaryDiagnostic do
   """
   def power_consumption(path \\ "./puzzle_input.txt") do
     diagnostic_report = parse(path)
-    num_row = String.length(List.first(diagnostic_report))
+    num_column = String.length(List.first(diagnostic_report))
 
     diagnostic_report = diagnostic_report
     |> Enum.join()
     |> String.split("", trim: true)
 
-    transformed_report = transform(num_row, diagnostic_report, num_row)
+    transformed_report = transform(num_column, diagnostic_report, num_column)
 
     gamma_rate = Enum.map(transformed_report, fn r ->
       %{"0" => zero_count, "1" => one_count} = Enum.frequencies(r)
@@ -29,27 +29,27 @@ defmodule BinaryDiagnostic do
   """
   def life_support_rating(path \\ "./puzzle_input.txt") do
     diagnostic_report = parse(path)
-    num_row = String.length(List.first(diagnostic_report))
+    num_column = String.length(List.first(diagnostic_report))
 
-    oxygen_generator_rating = filter_rating(:>=, diagnostic_report, num_row)
-    co2_scrubber_rating = filter_rating(:<, diagnostic_report, num_row)
+    oxygen_generator_rating = filter_rating(:>=, diagnostic_report, num_column)
+    co2_scrubber_rating = filter_rating(:<, diagnostic_report, num_column)
 
     to_decimal(oxygen_generator_rating) * to_decimal(co2_scrubber_rating)
   end
 
-  defp filter_rating(bit_criteria, diagnostic_report, num_row, index \\ 0)
+  defp filter_rating(bit_criteria, diagnostic_report, num_column, index \\ 0)
 
   defp filter_rating(_, [_ | [] ] = diagnostic_report, _, _), do: diagnostic_report
 
-  defp filter_rating(bit_criteria, diagnostic_report, num_row, index) do
+  defp filter_rating(bit_criteria, diagnostic_report, num_column, index) do
     flat_report = diagnostic_report
     |> Enum.join()
     |> String.split("", trim: true)
 
-    transformed_report = transform(num_row, flat_report, num_row) |> Enum.reverse()
-    bit_column = Enum.at(transformed_report, index)
+    transformed_report = transform(num_column, flat_report, num_column) |> Enum.reverse()
+    bit_row = Enum.at(transformed_report, index)
 
-    %{"0" => zero_count, "1" => one_count} = Enum.frequencies(bit_column)
+    %{"0" => zero_count, "1" => one_count} = Enum.frequencies(bit_row)
 
     bit_condition = apply(Kernel, bit_criteria, [one_count, zero_count])
     bit = if bit_condition, do: "1", else: "0"
@@ -59,7 +59,7 @@ defmodule BinaryDiagnostic do
     end)
 
     index = index + 1
-    filter_rating(bit_criteria, diagnostic_report, num_row, index)
+    filter_rating(bit_criteria, diagnostic_report, num_column, index)
   end
 
   defp parse(path) do
@@ -69,16 +69,16 @@ defmodule BinaryDiagnostic do
   end
 
 
-  defp transform(num_row, report, index, acc \\ [])
+  defp transform(num_column, report, index, acc \\ [])
 
-  defp transform(_num_row, _report, 0, acc), do: acc
+  defp transform(_num_column, _report, 0, acc), do: acc
 
-  defp transform(num_row, report, index, acc) do
-    column = Enum.take_every(report, num_row)
+  defp transform(num_column, report, index, acc) do
+    row = Enum.take_every(report, num_column)
     [_ | tail ] = report
     index = index - 1
 
-    transform(num_row, tail, index, [column | acc])
+    transform(num_column, tail, index, [row | acc])
   end
 
   defp to_decimal(binary) do
