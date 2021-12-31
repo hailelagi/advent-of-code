@@ -3,15 +3,15 @@ use std::fs;
 
 fn main() {
     println!("{:?}", power_consumption("./puzzle_input.txt"));
+    // println!("{:?}", life_support_rating("./puzzle_input.txt"));
 }
 
+// Part one: Find the power consumption of a submarine
 pub fn power_consumption(path: &str) -> u32 {
     let diagnostic_report = parse(path);
     let mut positions = HashMap::<u32, u32>::new();
     let limit = diagnostic_report[0].len();
     let report_length = diagnostic_report.len();
-
-    for i in 0..limit { positions.insert(i.try_into().unwrap(), 0); };
 
     for report in diagnostic_report {
         for (i, c) in report.chars().enumerate() {
@@ -40,6 +40,16 @@ pub fn power_consumption(path: &str) -> u32 {
     return to_decimal(&gamma_rate) * to_decimal(&epsilon_rate);
 }
 
+// Part two: Find the life support rating
+pub fn life_support_rating(path: &str) -> u32 {
+    let diagnostic_report = parse(path);
+    let oxygen_generator_rating = 0;
+    let co2_scrubber_rating = 0;
+
+    // println!("{:?}", diagnostic_report);
+    return oxygen_generator_rating * co2_scrubber_rating
+}
+
 fn to_decimal(binary: &str) -> u32 {
     return isize::from_str_radix(binary, 2).unwrap() as u32;
 }
@@ -62,13 +72,12 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test() {
+    fn test_part_one() {
         assert_eq!(power_consumption("./example_input.txt"), 198);
     }
-/*
+
     #[test]
-    fn test_two() {
-        assert_eq!(test("./example_input.txt"), 0);
+    fn test_part_two() {
+        assert_eq!(life_support_rating("./example_input.txt"), 230);
     }
-    */
 }
