@@ -8,9 +8,7 @@ defmodule GiantSquid do
 
     scores = for i <- 0..board_len, into: %{}, do: {i, []}
 
-    winning_board = search(board_len, numbers, boards, scores)
-    [called_index, {board_no, marked_numbers }] = winning_board
-
+    [called_index, {board_no, marked_numbers }] = search(board_len, numbers, boards, scores)
     last_called = Enum.at(numbers, called_index) |> String.to_integer()
 
     sum_unmarked =  Enum.at(boards, board_no)
@@ -34,47 +32,45 @@ defmodule GiantSquid do
     end)
 
     score = for i <- 0..board_len, into: %{}, do: {i, [Enum.at(positions, i)]}
-    scores = Map.merge(scores, score, fn _, x, y -> 
+
+    scores = Map.merge(scores, score, fn _, x, y ->
+      y = Enum.filter(y, fn i -> i != nil end)
       Enum.concat(x, y)
-    end) 
+    end)
+
     case wining_match(scores) do
-      {:ok, win_board} -> [index | win_board]
-      {:continue, _} -> 
+      [{board_num, win_board}] -> [index, {board_num, win_board}]
+      [] ->
         index = index + 1
         search(index, board_len, tail, boards, scores)
     end
   end
 
-  defp wining_match(scores) do 
-      if length(scores[0]) < 5 do
-        {:continue, nil}
-      else
-        res = Enum.map(scores, fn {board_number, score} -> 
-          window = score
-          |> Enum.sort(:asc) 
-          |> Enum.chunk_every(5, 5,:discard)
-          |> Enum.map(fn interval -> 
-            [incr | score] = interval
+  defp wining_match(scores) do
+        Enum.map(scores, fn {board_number, score} ->
+          if length(score) < 5 do
+            nil
+          else
+            row_one = Enum.all?([0, 1, 2, 3, 4],  fn x -> Enum.member?(score, x) end )
+            row_two = Enum.all?([5, 6, 7, 8, 9],  fn x -> Enum.member?(score, x) end )
+            row_three = Enum.all?([10, 11, 12, 13, 14],  fn x -> Enum.member?(score, x) end )
+            row_four = Enum.all?([15, 16, 17, 18, 19],  fn x -> Enum.member?(score, x) end )
+            row_five = Enum.all?([20, 21, 22, 23, 24],  fn x -> Enum.member?(score, x) end )
 
-            Enum.reduce_while(score, incr, fn x, acc ->
-              if (x - acc == 1 or x - acc == 5) and (incr in 0..4) do
-                {:cont, x }
-                  else
-                {:halt, -1}
-              end
-            end)
-          end)
+            col_one = Enum.all?([0, 5, 10, 15, 20],  fn x -> Enum.member?(score, x) end )
+            col_two = Enum.all?([1, 6, 11, 16, 21],  fn x -> Enum.member?(score, x) end )
+            col_three = Enum.all?([2, 7, 12, 17, 22],  fn x -> Enum.member?(score, x) end )
+            col_four = Enum.all?([3, 8, 13, 18, 23],  fn x -> Enum.member?(score, x) end )
+            col_five = Enum.all?([4, 9, 14, 19, 24],  fn x -> Enum.member?(score, x) end )
 
-          if Enum.any?(window, fn x -> x != -1 end), do: {board_number, score}, else: 0
-        end)
-        |> Enum.filter(fn r -> r != 0 end)
-
-      if not Enum.empty?(res) do
-        {:ok, res}
-        else
-        {:continue, nil}
-      end
-      end
+            if (row_one or row_two or row_three or row_four or row_five) or
+               (col_one or col_two or col_three or col_four or col_five) do
+              {board_number, score}
+            else
+              nil
+            end
+          end
+        end) |> Enum.filter(&(&1 != nil))
   end
 
 

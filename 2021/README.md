@@ -6,7 +6,7 @@ Might try a mixture of rust, elixir, racket and go this year!
 
 To run tests input the challenge's `name` in `snake_case` and interpolate into the following instruction when in the challenge's directory:
 
-`$ elixir -r "./#{name}ex" #{name}_test.exs`
+`$ elixir -r "./#{name}.ex" #{name}_test.exs`
 
 An example for day one(Sonar sweep) is:
 
