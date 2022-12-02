@@ -2,6 +2,7 @@ use std::fs;
 
 fn main() {
     println!("{:?}", elf_with_most("./puzzle_input.txt"));
+    println!("{:?}", top_three_elves("./puzzle_input.txt"));
 }
 
 pub fn elf_with_most(path: &str) -> i32 {

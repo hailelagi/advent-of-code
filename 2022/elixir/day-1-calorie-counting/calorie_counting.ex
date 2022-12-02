@@ -20,7 +20,7 @@ defmodule CalorieCounting do
 
     [first, second, third | _] =
       calories
-      |> Enum.map(fn c -> Enum.sum(c) end)
+      |> Stream.map(fn c -> Enum.sum(c) end)
       |> Enum.sort(&(&1 >= &2))
 
     first + second + third
@@ -36,3 +36,6 @@ defmodule CalorieCounting do
     end)
   end
 end
+
+IO.inspect CalorieCounting.elf_with_most()
+IO.inspect CalorieCounting.top_three_elves()
