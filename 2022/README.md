@@ -10,3 +10,7 @@ To run tests input the challenge's `name` in `snake_case` and interpolate into t
 An example for day one - Calorie Counting is:
 
 `user@root:~$ elixir -r "./calorie_counting.ex" calorie_counting_test.exs`
+
+# Rust
+
+Regular cargo project per day. `cargo test`
