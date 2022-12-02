@@ -8,8 +8,22 @@ defmodule CalorieCounting do
     calories = parse(path)
 
     calories
-    |> Enum.map(fn c ->  Enum.sum(c) end)
+    |> Enum.map(fn c -> Enum.sum(c) end)
     |> Enum.max()
+  end
+
+  @doc """
+    Part two: Finds all the calories of the top three Elves
+  """
+  def top_three_elves(path \\ "./puzzle_input.txt") do
+    calories = parse(path)
+
+    [first, second, third | _] =
+      calories
+      |> Enum.map(fn c -> Enum.sum(c) end)
+      |> Enum.sort(&(&1 >= &2))
+
+    first + second + third
   end
 
   defp parse(path) do
