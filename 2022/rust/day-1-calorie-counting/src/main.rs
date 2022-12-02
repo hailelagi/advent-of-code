@@ -6,17 +6,26 @@ fn main() {
 
 pub fn elf_with_most(path: &str) -> i32 {
     let calories = parse(path);
+    let mut max = 0;
 
-    println!("{:?}", calories);
+    for inventory in calories {
+        let elf_calory = inventory.iter().sum();
 
-    0
+        if elf_calory > max {
+            max = elf_calory
+        }
+    }
+
+    max
 }
 
-fn parse(path: &str) -> Vec<Vec<&str>> {
+fn parse(path: &str) -> Vec<Vec<i32>> {
     let puzzle_input = fs::read_to_string(path).expect("err reading puzzle input!");
-    let puzzle_input = puzzle_input.split("\n\n").map(|i| i.split("\n"));
+    let puzzle_input = puzzle_input
+        .split("\n\n")
+        .map(|i| i.split("\n").map(|c| c.parse::<i32>().unwrap()));
 
-    let mut calories: Vec<Vec<&str>> = Vec::new();
+    let mut calories: Vec<Vec<i32>> = Vec::new();
 
     for i in puzzle_input {
         calories.push(i.collect());
