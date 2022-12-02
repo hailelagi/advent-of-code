@@ -19,6 +19,17 @@ pub fn elf_with_most(path: &str) -> i32 {
     max
 }
 
+pub fn top_three_elves(path: &str) -> i32 {
+    let mut calories: Vec<i32> = parse(path)
+        .into_iter()
+        .map(|inventory| inventory.iter().sum())
+        .collect();
+
+    calories.sort();
+
+    calories.iter().rev().take(3).sum()
+}
+
 fn parse(path: &str) -> Vec<Vec<i32>> {
     let puzzle_input = fs::read_to_string(path).expect("err reading puzzle input!");
     let puzzle_input = puzzle_input
@@ -39,7 +50,12 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_depth_measurement() {
+    fn test_max_elf_calories() {
         assert_eq!(elf_with_most("./example_input.txt"), 24000);
+    }
+
+    #[test]
+    fn test_top_three_elves_calories() {
+        assert_eq!(top_three_elves("./example_input.txt"), 45000);
     }
 }
