@@ -6,12 +6,10 @@ defmodule RockPaperScissors do
     paper(2) -> B
     scissors(3) -> C
   """
-  alias Mix.Tasks.Xref
-  alias Mix.Tasks.Compile.Yecc
-  alias JasonVendored.Encode
 
   @doc """
-    It gets the total score by following the encrypted strategy guide
+    Part One:
+    Gets the total score by following the encrypted strategy guide
     X for Rock, Y for Paper, and Z for Scissors
   """
   def total_score(path \\ "./puzzle_input.txt") do
@@ -19,6 +17,20 @@ defmodule RockPaperScissors do
 
     strategy
     |> Enum.map(fn s -> outcomes(s) end)
+    |> Enum.map(fn o -> find_score(o) end)
+    |> Enum.sum()
+  end
+
+  @doc """
+    Part Two:
+    Gets the total score if everything goes according to strategy
+    with new outcomes predicted
+  """
+  def correct_total_score(path \\ "./puzzle_input.txt") do
+    strategy = parse(path)
+
+    strategy
+    |> Enum.map(fn s -> correct_outcomes(s) end)
     |> Enum.map(fn o -> find_score(o) end)
     |> Enum.sum()
   end
@@ -45,12 +57,46 @@ defmodule RockPaperScissors do
     end
   end
 
+  def correct_outcomes(round) do
+    case round do
+      [move, "X"] -> {:lose, bonus_score(move, :lose)}
+      [move, "Y"] -> {:draw, bonus_score(move, :draw)}
+      [move, "Z"] -> {:win, bonus_score(move, :win)}
+    end
+  end
+
+  defp bonus_score(move, :win) do
+    case move do
+      "A" -> 2
+      "B" -> 3
+      "C" -> 1
+    end
+  end
+
+  defp bonus_score(move, :lose) do
+    case move do
+      "A" -> 3
+      "B" -> 1
+      "C" -> 2
+    end
+  end
+
+  defp bonus_score(move, :draw) do
+    case move do
+      "A" -> 1
+      "B" -> 2
+      "C" -> 3
+    end
+  end
+
   defp parse(path) do
     strategy_guide = File.read!(path)
 
-    String.split(strategy_guide, "\n")
+    strategy_guide
+    |> String.split("\n")
     |> Enum.map(&String.split(&1, " "))
   end
 end
 
 IO.inspect(RockPaperScissors.total_score())
+IO.inspect(RockPaperScissors.correct_total_score())
