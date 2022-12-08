@@ -27,11 +27,11 @@ defmodule RucksackReorganization do
   @doc """
     Part two: Find the sum of priority of items for groups of three elves.
   """
-  def sum_priority_group(path \\ "./puzzle_input.txt", group \\ 3) do
+  def sum_priority_group(path \\ "./puzzle_input.txt") do
     rucksacks = parse(path)
 
     rucksacks
-    |> Stream.chunk_every(group)
+    |> Stream.chunk_every(3)
     |> Enum.map(fn group ->
       [one, two, three] =
         group
