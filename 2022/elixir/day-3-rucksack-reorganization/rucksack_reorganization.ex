@@ -24,6 +24,29 @@ defmodule RucksackReorganization do
     |> Enum.sum()
   end
 
+  @doc """
+    Part two: Find the sum of priority of items for groups of three elves.
+  """
+  def sum_priority_group(path \\ "./puzzle_input.txt", group \\ 3) do
+    rucksacks = parse(path)
+
+    rucksacks
+    |> Stream.chunk_every(group)
+    |> Enum.map(fn group ->
+      [one, two, three] =
+        group
+        |> Enum.map(&String.split(&1, ""))
+        |> Enum.map(&MapSet.new/1)
+
+      [_, <<item_codepoint::utf8>>] =
+        MapSet.intersection(one, two) |> MapSet.intersection(three) |> MapSet.to_list()
+
+      item_codepoint
+    end)
+    |> Enum.map(&codepoint_to_priority/1)
+    |> Enum.sum()
+  end
+
   defp codepoint_to_priority(c) do
     cond do
       c in 97..122 -> c - 96
@@ -39,3 +62,4 @@ defmodule RucksackReorganization do
 end
 
 IO.inspect(RucksackReorganization.sum_priority())
+IO.inspect(RucksackReorganization.sum_priority_group())
