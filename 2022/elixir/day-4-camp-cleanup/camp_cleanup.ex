@@ -8,8 +8,8 @@ defmodule CampCleanup do
     assignments = parse(path)
 
     Enum.count(assignments, fn [first, second] ->
-      first = set_range(first)
-      second = set_range(second)
+      first = range_set(first)
+      second = range_set(second)
 
       MapSet.subset?(first, second) or MapSet.subset?(second, first)
     end)
@@ -22,14 +22,14 @@ defmodule CampCleanup do
     assignments = parse(path)
 
     Enum.count(assignments, fn [first, second] ->
-      first = set_range(first)
-      second = set_range(second)
+      first = range_set(first)
+      second = range_set(second)
 
       MapSet.intersection(first, second) |> Enum.empty?() == false
     end)
   end
 
-  defp set_range(section) do
+  defp range_set(section) do
     [upper, lower] = String.split(section, "-") |> Enum.map(&String.to_integer/1)
 
     Range.new(upper, lower) |> MapSet.new()
