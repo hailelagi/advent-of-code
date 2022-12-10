@@ -12,17 +12,15 @@ defmodule SupplyStacks do
         {i, Enum.filter(Tuple.to_list(s), &(&1 != ""))}
       end
 
-    procedures = String.split(procedures, "\n")
-    rearranged = Enum.reduce(procedures, stacks, fn p, acc -> rearrangement(acc, p) end)
-
-    rearranged
-    |> Stream.into([])
-    |> Stream.map(fn {_, stack} -> List.last(stack) end)
-    |> Enum.join()
-    |> String.split(~r/[[:punct:]]/)
-    |> Enum.join()
+    procedures
+    |> String.splitter("\n")
+    |> Enum.reduce(stacks, fn p, acc -> rearrangement(acc, p) end)
+    |> pretty_print_crate()
   end
 
+  @doc """
+    Part two: crates on top in order of arrangement
+  """
   def top_crate_in_order(path \\ "./puzzle_input.txt") do
     [diagram, procedures] = parse(path)
 
@@ -31,10 +29,14 @@ defmodule SupplyStacks do
         {i, Enum.filter(Tuple.to_list(s), &(&1 != ""))}
       end
 
-    procedures = String.split(procedures, "\n")
-    rearranged = Enum.reduce(procedures, stacks, fn p, acc -> rearrangement(acc, p, true) end)
+    procedures
+    |> String.splitter("\n")
+    |> Enum.reduce(stacks, fn p, acc -> rearrangement(acc, p, true) end)
+    |> pretty_print_crate()
+  end
 
-    rearranged
+  defp pretty_print_crate(stack) do
+    stack
     |> Stream.into([])
     |> Stream.map(fn {_, stack} -> List.last(stack) end)
     |> Enum.join()
