@@ -31,9 +31,8 @@ defmodule SupplyStacks do
     to_index = to - 1
 
     {taken, new_list} = take_from(stacks[from_index], move)
-    prev = stacks[to_index]
 
-    %{stacks | from_index => new_list, to_index => prev ++ taken}
+    %{stacks | from_index => new_list, to_index => stacks[to_index] ++ taken}
   end
 
   def take_from(list, n) do
@@ -54,7 +53,7 @@ defmodule SupplyStacks do
     {_, row} =
       Enum.reduce(data, {0, []}, fn c, {count, rest} ->
         cond do
-          c == "" and count == 0 -> {count + 1, [""] ++ rest}
+          c == "" and count == 0 -> {count + 1, ["" | rest]}
           c == "" and count > 0 and count < 3 -> {count + 1, rest}
           c == "" and count == 3 -> {0, rest}
           c != "" -> {0, [c | rest]}
