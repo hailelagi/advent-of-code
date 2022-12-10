@@ -16,27 +16,50 @@ defmodule SupplyStacks do
     rearranged = Enum.reduce(procedures, stacks, fn p, acc -> rearrangement(acc, p) end)
 
     rearranged
-    |> Enum.into([])
-    |> Enum.map(fn {_, stack} -> List.last(stack) end)
+    |> Stream.into([])
+    |> Stream.map(fn {_, stack} -> List.last(stack) end)
     |> Enum.join()
     |> String.split(~r/[[:punct:]]/)
     |> Enum.join()
   end
 
-  defp rearrangement(stacks, procedure) do
+  def top_crate_in_order(path \\ "./puzzle_input.txt") do
+    [diagram, procedures] = parse(path)
+
+    stacks =
+      for {s, i} <- build_stack(diagram), into: %{} do
+        {i, Enum.filter(Tuple.to_list(s), &(&1 != ""))}
+      end
+
+    procedures = String.split(procedures, "\n")
+    rearranged = Enum.reduce(procedures, stacks, fn p, acc -> rearrangement(acc, p, true) end)
+
+    rearranged
+    |> Stream.into([])
+    |> Stream.map(fn {_, stack} -> List.last(stack) end)
+    |> Enum.join()
+    |> String.split(~r/[[:punct:]]/)
+    |> Enum.join()
+  end
+
+  defp rearrangement(stacks, procedure, order \\ false) do
     ["move", m, "from", f, "to", t] = String.split(procedure, " ")
     [move, from, to] = Enum.map([m, f, t], &String.to_integer/1)
 
     from_index = from - 1
     to_index = to - 1
 
-    {taken, new_list} = take_from(stacks[from_index], move)
+    {taken, new_list} = take_from(stacks[from_index], move, order)
 
     %{stacks | from_index => new_list, to_index => stacks[to_index] ++ taken}
   end
 
-  def take_from(list, n) do
-    {Enum.take(list, -n) |> Enum.reverse(), Enum.drop(list, -n)}
+  def take_from(list, n, order \\ false) do
+    if order do
+      {Enum.take(list, -n), Enum.drop(list, -n)}
+    else
+      {Enum.take(list, -n) |> Enum.reverse(), Enum.drop(list, -n)}
+    end
   end
 
   defp build_stack(diagram) do
@@ -71,3 +94,4 @@ defmodule SupplyStacks do
 end
 
 IO.inspect(SupplyStacks.top_crate())
+IO.inspect(SupplyStacks.top_crate_in_order())
