@@ -9,10 +9,15 @@ defmodule TuningTrouble do
   end
 
   @doc """
-    Part one:
-    Find the start of packet marker in a datastream buffer
+    Part one: Find the start of packet marker in a datastream buffer.
+    Pass in the argument `:packet`.
+
+    Part two: Find the start of message marker in a datastream buffer
+    Pass in the argument `:message`.
   """
-  def start_of_marker(datastream, type \\ :packet) do
+
+  @spec start_of_marker(String.t(), :packet | :message) :: integer()
+  def start_of_marker(datastream, type) do
     chunks =
       case type do
         :packet -> 4
@@ -25,7 +30,7 @@ defmodule TuningTrouble do
     |> Stream.filter(&(&1 != ""))
     |> Stream.with_index()
     |> Stream.chunk_every(chunks, 1, :discard)
-    |> Enum.reduce_while([], fn x, acc ->
+    |> Enum.reduce_while([], fn x, _acc ->
       packet = Enum.map(x, fn {value, _index} -> value end)
 
       if length(Enum.uniq(packet)) == length(packet) do
