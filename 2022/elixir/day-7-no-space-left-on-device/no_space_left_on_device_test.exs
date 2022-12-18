@@ -1,11 +1,9 @@
-defmodule NoSpaceLeftOnDevice do
-  @moduledoc false
+ExUnit.start()
 
-  def sum_directories(path \\ "./puzzle_input.txt") do
-    file_tree = parse(path)
-  end
+defmodule NoSpaceLeftOnDeviceTest do
+  use ExUnit.Case, async: true
 
-  defp parse(path) do
-    path |> File.read!()
+  test "it finds the sum of the total sizes of directories" do
+    assert NoSpaceLeftOnDevice.sum_directories("./example_input.txt") == 95437
   end
 end
