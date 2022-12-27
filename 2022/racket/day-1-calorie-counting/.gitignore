@@ -1,0 +1,5 @@
+# ignore Dr Racket artefacts
+
+/compiled
+/calorie-counting.rkt~
+/calorie-counting-test.rkt~
