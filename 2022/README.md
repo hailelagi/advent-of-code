@@ -14,3 +14,7 @@ An example for day one - Calorie Counting is:
 # Rust
 
 Regular cargo project per day. `cargo test`
+
+# Racket 
+
+These files require a setup of [Dr racket](https://docs.racket-lang.org/drracket/) or an installation of `#lang racket/base` with `rackunit`
