@@ -2,13 +2,13 @@ defmodule GiantSquid do
   @doc """
   Part one: Calculate which board will win first and the final score if chosen.
   """
-  def wining_board_score(path) do
+  def winning_board_score(path) do
     {numbers, boards} = parse(path)
     board_len = length(boards) - 1
 
     scores = for i <- 0..board_len, into: %{}, do: {i, []}
 
-    [called_index, {board_no, marked_numbers }] = search(board_len, numbers, boards, scores)
+    [called_index, {board_no, marked_numbers }] = search(0, board_len, numbers, boards, scores)
     last_called = Enum.at(numbers, called_index) |> String.to_integer()
 
     sum_unmarked =  Enum.at(boards, board_no)
@@ -19,12 +19,11 @@ defmodule GiantSquid do
     last_called * sum_unmarked
   end
 
-  defp search(index \\ 0, board_len, numbers, boards, scores)
+  defp search(index, board_len, numbers, boards, scores, find_last \\ false, last \\ nil, called \\ nil)
 
-  # win not possible
-  defp search(_, _, [], _, scores), do: scores
+  defp search(_, _, [], _, _, _, last, called), do: [called, last]
 
-  defp search(index, board_len, numbers, boards, scores) do
+  defp search(index, board_len, numbers, boards, scores, find_last, last, called) do
     [n | tail] = numbers
 
     positions = Enum.map(boards, fn board -> 
@@ -38,16 +37,22 @@ defmodule GiantSquid do
       Enum.concat(x, y)
     end)
 
-    case wining_match(scores) do
+    match = if find_last, do: wining_match(scores, true, last), else: wining_match(scores)
+
+    case match do
       [{board_num, win_board}] -> [index, {board_num, win_board}]
+      {:find_last, nil, last_known} ->
+        search(index + 1, board_len, tail, boards, scores, true, last_known, called)
+      {:find_last, last_known} ->
+       called = index
+        search(index + 1, board_len, tail, boards, scores, true, last_known, called)
       [] ->
-        index = index + 1
-        search(index, board_len, tail, boards, scores)
+        search(index + 1, board_len, tail, boards, scores)
     end
   end
 
-  defp wining_match(scores) do
-        Enum.map(scores, fn {board_number, score} ->
+  defp wining_match(scores, find_last \\ false, last_known \\ nil) do
+        res = Enum.map(scores, fn {board_number, score} ->
           if length(score) < 5 do
             nil
           else
@@ -71,14 +76,30 @@ defmodule GiantSquid do
             end
           end
         end) |> Enum.filter(&(&1 != nil))
+
+        cond do
+          (find_last == true) and (not Enum.empty?(res)) ->
+
+            [last | _] = res
+            {:find_last, last}
+
+          (find_last == true) ->
+            {:find_last, nil, last_known}
+          true ->
+              res
+        end
   end
 
 
   @doc """
-  Part two:
+  Part two: Which board wins last
   """
-  def part_two do
-    0
+  def last_winning_board_score(path) do
+    {numbers, boards} = parse(path)
+    board_len = length(boards) - 1
+
+    scores = for i <- 0..board_len, into: %{}, do: {i, []}
+    search(0, board_len, numbers, boards, scores, true)
   end
 
   defp parse(path) do
@@ -92,4 +113,4 @@ defmodule GiantSquid do
   end
 end
 
-IO.puts GiantSquid.wining_board_score("./puzzle_input.txt")
+IO.inspect GiantSquid.last_winning_board_score("./example_input.txt")
