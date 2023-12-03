@@ -4,7 +4,8 @@
             "path": "."
         },
         {
-            "path": "2023/trebuchet?!/rust"
+           // "path": "2023/day-1-trebuchet/rust",
+            "path": "2023/day-2-cube-conundrum/rust"
         }
     ],
     "settings": {}
