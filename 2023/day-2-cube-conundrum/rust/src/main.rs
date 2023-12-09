@@ -4,6 +4,12 @@ fn main() {
     println!("{:?}", sum_game_ids("../puzzle_input.txt"));
 }
 
+// [(R), (.G), (B)]
+// load bag with cubes
+// random selection
+// reveal and return
+// Game 1: 3 blue, 4 red; 1 red, 2 green, 6 blue; 2 green
+
 // Part One
 pub fn sum_game_ids(path: &str) -> u32 {
     let games = parse(path);
