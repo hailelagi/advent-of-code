@@ -19,16 +19,4 @@ Regular cargo project per day. `cargo test`
 
 `go test calorie_counting.go`
 
-## Zig
-
-zig test calorie_counting.zig
-
-## Ocaml
-
-wip
-
-## Racket
-
-wip
-
 These files require a setup of [Dr racket](https://docs.racket-lang.org/drracket/) or an installation of `#lang racket/base` with `rackunit`

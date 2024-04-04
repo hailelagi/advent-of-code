@@ -1,3 +1,5 @@
 .DS_Store
 .elixir_ls
 .idea
+
+**/puzzle_input.txt
