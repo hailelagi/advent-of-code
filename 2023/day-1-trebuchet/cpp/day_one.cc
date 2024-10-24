@@ -49,7 +49,7 @@ int main(void) {
 
     example_input.close();
 
-    for (auto i: calibration_documents) std::cout << i << "\n";
+    for (auto document: calibration_documents) std::cout << document << "\n";
 
     return 0;
 }

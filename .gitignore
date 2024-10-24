@@ -1,5 +1,6 @@
 .DS_Store
 .elixir_ls
 .idea
+/.vscode
 
 **/puzzle_input.txt
