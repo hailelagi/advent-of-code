@@ -1,3 +1,5 @@
 /build
 /day_one
 /.dydlib
+/.zig-cache
+/zig-out

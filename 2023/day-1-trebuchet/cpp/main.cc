@@ -1,11 +1,10 @@
-#include <cctype>
+#include "day_one.h"
 #include <cstdlib>
 #include <fstream>
+#include <stdio.h>
+#include <stdlib.h>
 #include <string>
 #include <vector>
-#include <stdlib.h>
-#include <stdio.h>
-#include "day_one.h"
 
 using namespace std;
 
@@ -15,11 +14,14 @@ int CalibrationDocument::recover_and_sum() {
   for (auto doc : documents) {
     auto first = '\0', last = '\0';
     int l = doc.length();
-    
+
     for (auto i = 0, j = l; i <= l && j >= 0; i++, j--) {
-      if (first != '\0' && last != '\0') break;
-      if (isdigit(doc[i]) && first == '\0') first = doc[i];
-      if (isdigit(doc[j]) && last == '\0') last = doc[j];
+      if (first != '\0' && last != '\0')
+        break;
+      if (isdigit(doc[i]) && first == '\0')
+        first = doc[i];
+      if (isdigit(doc[j]) && last == '\0')
+        last = doc[j];
     }
 
     string combined_number;
@@ -53,10 +55,6 @@ void CalibrationDocument::parse_puzzle_input(string dir) {
 }
 
 int main() {
-  // todo(fixme): linker broken with cmake?
-  // workaround temp: g++ -std=c++11 day_one.cc -g -o day_one && ./day_one
-  // can add flags manually
-
   auto recovery = CalibrationDocument("../puzzle_input.txt");
   std::cout << "The sum is: " << recovery.recover_and_sum() << "\n";
 
