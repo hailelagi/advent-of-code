@@ -1,10 +1,9 @@
+#include "day_one.h"
 #include <gtest/gtest.h>
-#include "day_one"
 
 // Demonstrate some basic assertions.
-TEST(AocDayOne, BasicAssertions) {
-  // Expect two strings not to be equal.
-  EXPECT_STRNE("hello", "world");
-  // Expect equality.
-  EXPECT_EQ(7 * 6, 42);
+TEST(CalibrationDocument, RecoverCalibration) {
+  auto recovery = CalibrationDocument("../example_input.txt");
+
+  EXPECT_EQ(recovery.recover_and_sum(), 142);
 }

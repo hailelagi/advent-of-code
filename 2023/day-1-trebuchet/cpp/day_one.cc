@@ -1,55 +1,64 @@
-#include <stdexcept>
-#include <stdio.h>
-#include <iostream>
+#include <cctype>
+#include <cstdlib>
 #include <fstream>
-#include <exception>
 #include <string>
 #include <vector>
+#include <stdlib.h>
+#include <stdio.h>
+#include "day_one.h"
 
-/*
-todo(readme): // https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#S-errors
+using namespace std;
+
+int CalibrationDocument::recover_and_sum() {
+  int sum = 0;
+
+  for (auto doc : documents) {
+    auto first = '\0', last = '\0';
+    int l = doc.length();
+    
+    for (auto i = 0, j = l; i <= l && j >= 0; i++, j--) {
+      if (first != '\0' && last != '\0') break;
+      if (isdigit(doc[i]) && first == '\0') first = doc[i];
+      if (isdigit(doc[j]) && last == '\0') last = doc[j];
+    }
+
+    string combined_number;
+
+    combined_number.push_back(first);
+    combined_number.push_back(last);
+
+    sum += atoi(combined_number.c_str());
+  }
+
+  return sum;
+};
+
+void CalibrationDocument::parse_puzzle_input(string dir) {
+  ifstream example_input;
+  example_input.open(dir);
+
+  if (!example_input.is_open()) {
+    throw runtime_error("could not read puzzle input :(");
+  }
+
+  string document;
+  vector<string> calibration_documents;
+
+  while (getline(example_input, document)) {
+    calibration_documents.push_back(document);
+  }
+
+  example_input.close();
+  documents = calibration_documents;
+}
 
 int main() {
-  std::ifstream example_input;
+  // todo(fixme): linker broken with cmake?
+  // workaround temp: g++ -std=c++11 day_one.cc -g -o day_one && ./day_one
+  // can add flags manually
 
-  try {
-    std::ifstream example_input("../../example_input.txt");
-    example_input.exceptions(std::ifstream::failbit);
-  } catch (const std::ios_base::failure &fail) {
-    std::clog << fail.what() << '\n';
-  }
-
-  std::string puzzle;
-
-  while(example_input >> puzzle) {
-    std::cout << puzzle;
-  }
-
-  std::cout << puzzle;
-  std::cout << "answer is:" << '\n';
+  auto recovery = CalibrationDocument("../puzzle_input.txt");
+  std::cout << "The sum is: " << recovery.recover_and_sum() << "\n";
 
   return 0;
-}
-*/
-
-int main(void) {
-    std::ifstream example_input;
-
-    example_input.open("../../example_input.txt");
-    if (!example_input.is_open()) {
-        throw "could not read puzzle input :(";
-    }
-
-    std::string document;
-    std::vector<std::string> calibration_documents;
-
-    while (example_input >> document) {
-        calibration_documents.push_back(document);
-    }
-
-    example_input.close();
-
-    for (auto document: calibration_documents) std::cout << document << "\n";
-
-    return 0;
 }
