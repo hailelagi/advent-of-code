@@ -13,6 +13,10 @@ pub fn build(b: *std.Build) void {
         .file = .{ .cwd_relative = "main.cc" },
         .flags = &.{"-std=c++17"},
     });
+    exe.addCSourceFile(.{
+        .file = .{ .cwd_relative = "day_one.cc" },
+        .flags = &.{"-std=c++17"},
+    });
     exe.linkLibCpp();
     b.installArtifact(exe);
 
@@ -28,7 +32,32 @@ pub fn build(b: *std.Build) void {
     day_one_lib.linkLibCpp();
     b.installArtifact(day_one_lib);
 
-    // Test Lib
+    // GoogleTest Setup
+    const gtest = b.addStaticLibrary(.{
+        .name = "gtest",
+        .target = target,
+        .optimize = optimize,
+    });
+
+    const gtest_include_flags = [_][]const u8{
+        "-std=c++17",
+        "-Igoogletest/googletest/include",
+        "-Igoogletest/googletest",
+        "-pthread",
+    };
+
+    // Add GoogleTest source files
+    gtest.addCSourceFile(.{
+        .file = .{ .cwd_relative = "googletest/googletest/src/gtest-all.cc" },
+        .flags = &gtest_include_flags,
+    });
+    gtest.addCSourceFile(.{
+        .file = .{ .cwd_relative = "googletest/googletest/src/gtest_main.cc" },
+        .flags = &gtest_include_flags,
+    });
+    gtest.linkLibCpp();
+
+    // Test Executable
     const day_one_test = b.addExecutable(.{
         .name = "day_one_test",
         .target = target,
@@ -36,20 +65,25 @@ pub fn build(b: *std.Build) void {
     });
     day_one_test.addCSourceFile(.{
         .file = .{ .cwd_relative = "day_one_test.cc" },
-        .flags = &.{"-std=c++17"},
+        .flags = &.{
+            "-std=c++17",
+            "-Igoogletest/googletest/include",
+            "-pthread",
+        },
     });
 
-    // TODO: figure out how to pull in gtest
-
+    // Link against GoogleTest and your library
+    day_one_test.linkLibrary(gtest);
+    day_one_test.linkLibrary(day_one_lib);
     day_one_test.linkLibCpp();
-
-    // Install the test executable
     b.installArtifact(day_one_test);
 
+    // Test step
     const test_step = b.step("test", "Run library tests");
     const run_test_cmd = b.addRunArtifact(day_one_test);
     test_step.dependOn(&run_test_cmd.step);
 
+    // Run step
     const run_cmd = b.addRunArtifact(exe);
     run_cmd.step.dependOn(b.getInstallStep());
     if (b.args) |args| {

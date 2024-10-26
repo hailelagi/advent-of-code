@@ -3,3 +3,4 @@
 /.dydlib
 /.zig-cache
 /zig-out
+/googletest
