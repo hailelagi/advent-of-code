@@ -46,7 +46,7 @@ pub fn build(b: *std.Build) void {
         "-pthread",
     };
 
-    // Add GoogleTest source files
+    // todo: auto detect this from homebrew, zig package manager? or curl/http git clone?
     gtest.addCSourceFile(.{
         .file = .{ .cwd_relative = "googletest/googletest/src/gtest-all.cc" },
         .flags = &gtest_include_flags,
@@ -72,14 +72,13 @@ pub fn build(b: *std.Build) void {
         },
     });
 
-    // Link against GoogleTest and your library
     day_one_test.linkLibrary(gtest);
     day_one_test.linkLibrary(day_one_lib);
     day_one_test.linkLibCpp();
     b.installArtifact(day_one_test);
 
-    // Test step
-    const test_step = b.step("test", "Run library tests");
+    // Test
+    const test_step = b.step("test", "Run GTest tests");
     const run_test_cmd = b.addRunArtifact(day_one_test);
     test_step.dependOn(&run_test_cmd.step);
 
@@ -90,6 +89,6 @@ pub fn build(b: *std.Build) void {
         run_cmd.addArgs(args);
     }
 
-    const run_step = b.step("run", "Run the app");
+    const run_step = b.step("run", "run app");
     run_step.dependOn(&run_cmd.step);
 }

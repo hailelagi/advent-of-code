@@ -35,6 +35,16 @@ int CalibrationDocument::recover_and_sum() {
   return sum;
 };
 
+int CalibrationDocument::recover_and_sum_letters() {
+  int sum = 0;
+
+  for (auto doc : documents) {
+    // todo
+  }
+
+  return sum;
+};
+
 void CalibrationDocument::parse_puzzle_input(string dir) {
   ifstream example_input;
   example_input.open(dir);

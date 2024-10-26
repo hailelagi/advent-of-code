@@ -14,5 +14,6 @@ class CalibrationDocument {
   public:
     CalibrationDocument(std::string dir){{parse_puzzle_input(dir);}};
     int recover_and_sum();
+    int recover_and_sum_letters();
     void parse_puzzle_input(std::string dir);
 };
