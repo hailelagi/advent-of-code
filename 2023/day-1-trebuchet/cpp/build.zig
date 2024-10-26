@@ -77,12 +77,24 @@ pub fn build(b: *std.Build) void {
     day_one_test.linkLibCpp();
     b.installArtifact(day_one_test);
 
-    // Test
+    // fmt
+    const format_step = b.step("fmt", "Format C++ code with clang-format");
+    const cpp_files = &[_][]const u8{
+        "main.cc",
+        "day_one.cc",
+        "day_one_test.cc",
+    };
+    for (cpp_files) |file| {
+        const format_cmd = b.addSystemCommand(&.{ "clang-format", "-i", file });
+        format_step.dependOn(&format_cmd.step);
+    }
+
+    // test
     const test_step = b.step("test", "Run GTest tests");
     const run_test_cmd = b.addRunArtifact(day_one_test);
     test_step.dependOn(&run_test_cmd.step);
 
-    // Run step
+    // run
     const run_cmd = b.addRunArtifact(exe);
     run_cmd.step.dependOn(b.getInstallStep());
     if (b.args) |args| {

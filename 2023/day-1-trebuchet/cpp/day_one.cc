@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string>
+#include <unordered_map>
 #include <vector>
 
 using namespace std;
@@ -37,9 +38,13 @@ int CalibrationDocument::recover_and_sum() {
 
 int CalibrationDocument::recover_and_sum_letters() {
   int sum = 0;
+  unordered_map<string, int> letters{
+      {"one", 1}, {"two", 2},   {"three", 3}, {"four", 4}, {"five", 5},
+      {"six", 6}, {"seven", 7}, {"eight", 8}, {"nine", 9},
+  };
 
   for (auto doc : documents) {
-    // todo
+    cout << doc << "\n";
   }
 
   return sum;
@@ -48,7 +53,6 @@ int CalibrationDocument::recover_and_sum_letters() {
 void CalibrationDocument::parse_puzzle_input(string dir) {
   ifstream example_input;
   example_input.open(dir);
-
   if (!example_input.is_open()) {
     throw runtime_error("could not read puzzle input :(");
   }
