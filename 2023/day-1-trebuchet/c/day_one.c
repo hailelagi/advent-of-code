@@ -1,8 +1,5 @@
 #include "day_one.h"
 
-#define MAX_DOCS 100
-#define MAX_DOC_LEN 100
-
 int recover_and_sum(CalibrationDocument *calib_doc) {
   int sum = 0;
 

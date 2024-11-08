@@ -3,8 +3,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define MAX_DOCS 100
-#define MAX_DOC_LEN 100
+#define MAX_DOCS 1000
+#define MAX_DOC_LEN 1000
 
 typedef struct {
   char puzzle_dir[MAX_DOC_LEN];
