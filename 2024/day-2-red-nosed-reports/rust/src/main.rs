@@ -1,5 +1,10 @@
 use std::fs;
 
+enum Level {
+    Increasing,
+    Decreasing,
+}
+
 fn main() {
     println!("{:?}", safe_reports("../puzzle_input.txt"));
     println!("{:?}", tolerance_safe_reports("../puzzle_input.txt"));
@@ -14,13 +19,12 @@ fn safe_reports(path: &str) -> i32 {
             let (mut increasing, mut decreasing) = (true, true);
 
             for window in level.windows(2) {
-                if let [a, b] = window {
-                    if !(1..=3).contains(&(b - a)) {
-                        increasing = false;
-                    }
-                    if !(1..=3).contains(&(a - b)) {
-                        decreasing = false;
-                    }
+                if !safe_level(Level::Increasing, window) {
+                    increasing = false
+                }
+
+                if !safe_level(Level::Decreasing, window) {
+                    decreasing = false
                 }
 
                 if !increasing && !decreasing {
@@ -35,8 +39,53 @@ fn safe_reports(path: &str) -> i32 {
 
 fn tolerance_safe_reports(path: &str) -> i32 {
     let reports = parse(path);
+    let tolerance = &mut true;
 
-    todo!()
+    reports
+        .iter()
+        .filter(|level| {
+            let (mut increasing, mut decreasing) = (true, true);
+
+            for window in level.windows(2) {
+                if !safe_level(Level::Increasing, window) {
+                    increasing = false
+                }
+
+                if !safe_level(Level::Decreasing, window) {
+                    decreasing = false
+                }
+
+                if !increasing && !decreasing {
+                    let mut skip_increasing = true;
+                    let mut skip_decreasing = true;
+
+                    for i in 0..level.len() - 2 {
+                        if !safe_level(Level::Increasing, &[level[i], level[i + 2]]) {
+                            skip_increasing = false;
+                        }
+
+                        if !safe_level(Level::Decreasing, &[level[i], level[i + 2]]) {
+                            skip_decreasing = false;
+                        }
+
+                        if !skip_increasing && !skip_decreasing {
+                            return false;
+                        }
+                    }
+                }
+            }
+
+            true
+        })
+        .count() as i32
+}
+
+fn safe_level(level: Level, window: &[i32]) -> bool {
+    let (a, b) = (window[0], window[1]);
+    match level {
+        Level::Increasing => (1..=3).contains(&(b - a)),
+        Level::Decreasing => (1..=3).contains(&(a - b)),
+    }
 }
 
 fn parse(path: &str) -> Vec<Vec<i32>> {
