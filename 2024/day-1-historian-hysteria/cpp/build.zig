@@ -14,23 +14,23 @@ pub fn build(b: *std.Build) void {
         .flags = &.{"-std=c++17"},
     });
     exe.addCSourceFile(.{
-        .file = .{ .cwd_relative = "day_one.cc" },
+        .file = .{ .cwd_relative = "historian_hysteria.cc" },
         .flags = &.{"-std=c++17"},
     });
     exe.linkLibCpp();
     b.installArtifact(exe);
 
-    const day_one_lib = b.addStaticLibrary(.{
-        .name = "day_one",
+    const historian_hysteria_lib = b.addStaticLibrary(.{
+        .name = "historian_hysteria",
         .target = target,
         .optimize = optimize,
     });
-    day_one_lib.addCSourceFile(.{
-        .file = .{ .cwd_relative = "day_one.cc" },
+    historian_hysteria_lib.addCSourceFile(.{
+        .file = .{ .cwd_relative = "historian_hysteria.cc" },
         .flags = &.{"-std=c++17"},
     });
-    day_one_lib.linkLibCpp();
-    b.installArtifact(day_one_lib);
+    historian_hysteria_lib.linkLibCpp();
+    b.installArtifact(historian_hysteria_lib);
 
     // GoogleTest Setup
     const gtest = b.addStaticLibrary(.{
@@ -66,13 +66,13 @@ pub fn build(b: *std.Build) void {
     gtest.linkLibCpp();
 
     // Test Executable
-    const day_one_test = b.addExecutable(.{
-        .name = "day_one_test",
+    const historian_hysteria_test = b.addExecutable(.{
+        .name = "historian_hysteria_test",
         .target = target,
         .optimize = optimize,
     });
-    day_one_test.addCSourceFile(.{
-        .file = .{ .cwd_relative = "day_one_test.cc" },
+    historian_hysteria_test.addCSourceFile(.{
+        .file = .{ .cwd_relative = "historian_hysteria_test.cc" },
         .flags = &.{
             "-std=c++17",
             "-Igoogletest/googletest/include",
@@ -80,17 +80,17 @@ pub fn build(b: *std.Build) void {
         },
     });
 
-    day_one_test.linkLibrary(gtest);
-    day_one_test.linkLibrary(day_one_lib);
-    day_one_test.linkLibCpp();
-    b.installArtifact(day_one_test);
+    historian_hysteria_test.linkLibrary(gtest);
+    historian_hysteria_test.linkLibrary(historian_hysteria_lib);
+    historian_hysteria_test.linkLibCpp();
+    b.installArtifact(historian_hysteria_test);
 
     // fmt
     const format_step = b.step("fmt", "Format C++ code with clang-format");
     const cpp_files = &[_][]const u8{
         "main.cc",
-        "day_one.cc",
-        "day_one_test.cc",
+        "historian_hysteria.cc",
+        "historian_hysteria_test.cc",
     };
     for (cpp_files) |file| {
         const format_cmd = b.addSystemCommand(&.{ "clang-format", "-i", file });
@@ -99,7 +99,7 @@ pub fn build(b: *std.Build) void {
 
     // test
     const test_step = b.step("test", "Run GTest tests");
-    const run_test_cmd = b.addRunArtifact(day_one_test);
+    const run_test_cmd = b.addRunArtifact(historian_hysteria_test);
     test_step.dependOn(&run_test_cmd.step);
 
     // run

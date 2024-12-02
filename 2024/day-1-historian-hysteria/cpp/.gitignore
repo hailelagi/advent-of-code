@@ -1,0 +1,6 @@
+/build
+/historian_hysteria
+/.dydlib
+/.zig-cache
+/zig-out
+/googletest
