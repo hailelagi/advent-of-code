@@ -1,4 +1,0 @@
-(executable
- (public_name day_1_calorie_counting)
- (name main)
- (libraries day_1_calorie_counting))
