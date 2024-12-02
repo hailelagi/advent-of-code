@@ -2,15 +2,16 @@ use std::fs;
 
 fn main() {
     println!("{:?}", safe_reports("../puzzle_input.txt"));
+    println!("{:?}", tolerance_safe_reports("../puzzle_input.txt"));
 }
 
 fn safe_reports(path: &str) -> i32 {
     let reports = parse(path);
+
     reports
         .iter()
         .filter(|level| {
-            let mut increasing = true;
-            let mut decreasing = true;
+            let (mut increasing, mut decreasing) = (true, true);
 
             for window in level.windows(2) {
                 if let [a, b] = window {
@@ -21,6 +22,7 @@ fn safe_reports(path: &str) -> i32 {
                         decreasing = false;
                     }
                 }
+
                 if !increasing && !decreasing {
                     return false;
                 }
@@ -29,6 +31,12 @@ fn safe_reports(path: &str) -> i32 {
             true
         })
         .count() as i32
+}
+
+fn tolerance_safe_reports(path: &str) -> i32 {
+    let reports = parse(path);
+
+    todo!()
 }
 
 fn parse(path: &str) -> Vec<Vec<i32>> {
@@ -47,7 +55,12 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_total_pair_distance() {
+    fn test_safe_reports() {
         assert_eq!(safe_reports("../example_input.txt"), 2)
+    }
+
+    #[test]
+    fn test_tolerance_safe_reports() {
+        assert_eq!(tolerance_safe_reports("../example_input.txt"), 4)
     }
 }
