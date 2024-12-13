@@ -14,7 +14,7 @@ int LocationReport::total_pair_distance() {
   sort(first.begin(), first.end());
   sort(second.begin(), second.end());
 
-  for (size_t i = 0; i < first.size(); ++i) {
+  for (auto i = 0; i < first.size(); ++i) {
     total += abs(second[i] - first[i]);
   }
 
@@ -25,11 +25,11 @@ int LocationReport::similarity_score() {
   int64_t score = 0;
   unordered_map<int, int> similarity;
 
-  for (int id : second) {
+  for (auto id : second) {
     similarity[id]++;
   }
 
-  for (int id : first) {
+  for (auto id : first) {
     if (similarity.find(id) != similarity.end()) {
       score += static_cast<int64_t>(similarity[id]) * id;
     }
