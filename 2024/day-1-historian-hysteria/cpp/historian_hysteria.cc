@@ -22,7 +22,20 @@ int LocationReport::total_pair_distance() {
 }
 
 int LocationReport::similarity_score() {
-  return 0;
+  int64_t score = 0;
+  unordered_map<int, int> similarity;
+
+  for (int id : second) {
+    similarity[id]++;
+  }
+
+  for (int id : first) {
+    if (similarity.find(id) != similarity.end()) {
+      score += static_cast<int64_t>(similarity[id]) * id;
+    }
+  }
+
+  return score;
 }
 
 void LocationReport::parse_puzzle_input(string dir) {
