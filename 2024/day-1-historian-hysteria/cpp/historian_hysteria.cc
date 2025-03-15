@@ -1,18 +1,14 @@
 #include "historian_hysteria.h"
+#include <algorithm>
 #include <cstdint>
-#include <cstdlib>
 #include <sstream>
-#include <stdio.h>
-#include <stdlib.h>
-#include <vector>
 
-using namespace std;
-
+namespace aoc {
 int LocationReport::total_pair_distance() {
   int64_t total = 0;
 
-  sort(first.begin(), first.end());
-  sort(second.begin(), second.end());
+  std::sort(first.begin(), first.end());
+  std::sort(second.begin(), second.end());
 
   for (auto i = 0; i < first.size(); ++i) {
     total += abs(second[i] - first[i]);
@@ -23,7 +19,7 @@ int LocationReport::total_pair_distance() {
 
 int LocationReport::similarity_score() {
   int64_t score = 0;
-  unordered_map<int, int> similarity;
+  std::unordered_map<int, int> similarity;
 
   for (auto id : second) {
     similarity[id]++;
@@ -38,17 +34,17 @@ int LocationReport::similarity_score() {
   return score;
 }
 
-void LocationReport::parse_puzzle_input(string dir) {
-  ifstream input;
+void LocationReport::parse_puzzle_input(const std::string &path) {
+  std::ifstream input;
 
-  input.open(dir);
+  input.open(path);
   if (!input.is_open()) {
-    throw runtime_error("could not read puzzle input :(");
+    throw std::runtime_error("could not read puzzle input :(");
   }
 
-  string line;
+  std::string line;
   while (getline(input, line)) {
-    istringstream iss(line);
+    std::istringstream iss(line);
     int f, s;
     iss >> f >> s;
 
@@ -57,3 +53,4 @@ void LocationReport::parse_puzzle_input(string dir) {
   }
   input.close();
 }
+} // namespace aoc

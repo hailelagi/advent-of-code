@@ -1,12 +1,10 @@
-#include <cctype>
-#include <cstdlib>
-#include <fstream>
-#include <iostream>
-#include <stdio.h>
-#include <stdlib.h>
+#pragma once
+
 #include <string>
 #include <vector>
+#include <fstream>
 
+namespace aoc {
 class LocationReport {
   std::string puzzle_dir;
   std::vector<std::string> locations;
@@ -15,8 +13,11 @@ class LocationReport {
   std::vector<int64_t> second;
 
 public:
-  LocationReport(std::string dir){{parse_puzzle_input(dir);}};
+  LocationReport(const std::string &path){{parse_puzzle_input(path);}};
+  ~LocationReport() {};
+
     int total_pair_distance();
     int similarity_score();
-    void parse_puzzle_input(std::string dir);
+    void parse_puzzle_input(const std::string&);
 };
+} // namespace aoc

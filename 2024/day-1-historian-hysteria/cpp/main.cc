@@ -1,12 +1,8 @@
 #include "historian_hysteria.h"
-#include <cstdlib>
-#include <stdio.h>
-#include <stdlib.h>
-
-using namespace std;
+#include <iostream>
 
 int main() {
-  auto report = LocationReport("../puzzle_input.txt");
+  auto report = aoc::LocationReport("../puzzle_input.txt");
 
   std::cout << "The total distance is: " << report.total_pair_distance()
             << "\n";
