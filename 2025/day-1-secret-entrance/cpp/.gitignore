@@ -1,0 +1,6 @@
+/build
+/secret_entrance
+/.dydlib
+/.zig-cache
+/zig-out
+/googletest
